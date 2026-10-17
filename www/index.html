@@ -1,0 +1,1836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>GNIOT - Student Hostel OutPass</title>
+  
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: rgba(0,0,0,0);
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+      background-color: #eef2f8;
+    }
+
+    body {
+      background-color: #eef2f8;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      color: #212529;
+      line-height: 1.4;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .portal-container {
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 10px 12px 24px 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ---------------- HEADER & LOGO LOGOUT ---------------- */
+    .gniot-header {
+      background: linear-gradient(180deg, #024ba1 0%, #00367d 100%);
+      color: #ffffff;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+      position: sticky;
+      top: 0;
+      z-index: 30;
+    }
+
+    .brand-logo-badge {
+      width: 42px;
+      height: 42px;
+      background: #e8a825;
+      border-radius: 8px;
+      border: 1.5px solid #ffde6b;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      cursor: pointer;
+      user-select: none;
+      touch-action: manipulation;
+    }
+    .brand-logo-badge:active {
+      transform: scale(0.96);
+      filter: brightness(0.95);
+    }
+
+    .brand-logo-text {
+      font-size: 7.5px;
+      font-weight: 900;
+      color: #002c6b;
+      letter-spacing: -0.2px;
+      margin-top: 1px;
+      line-height: 1;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-toggle-btn {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 4px;
+      padding: 6px 9px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: manipulation;
+    }
+
+    /* ---------------- LOGIN VIEW ---------------- */
+    #loginView {
+      padding: 16px 14px 28px 14px;
+      max-width: 440px;
+      margin: 20px auto;
+      width: 100%;
+    }
+
+    .login-card {
+      background: #ffffff;
+      border-radius: 10px;
+      border: 1px solid #d8e0ea;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+
+    .login-card-header {
+      background: #004595;
+      color: #ffffff;
+      padding: 16px 14px;
+      text-align: center;
+    }
+
+    .login-card-header h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .login-card-header p {
+      font-size: 11.5px;
+      color: #e0e7ff;
+    }
+
+    .login-card-body {
+      padding: 18px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+    }
+
+    .btn-login-submit {
+      width: 100%;
+      background: #0d6efd;
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      padding: 11px;
+      font-size: 14.5px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 6px;
+      box-shadow: 0 2px 4px rgba(13, 110, 253, 0.3);
+      touch-action: manipulation;
+    }
+
+    /* ---------------- BREADCRUMB CAPSULE (PORTAL VIEW) ---------------- */
+    .breadcrumb-pill {
+      display: inline-flex;
+      align-items: center;
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 5px 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      margin: 10px 0 12px 0;
+      font-size: 12.5px;
+      border: 1px solid #e2e8f0;
+      color: #64748b;
+    }
+    .breadcrumb-pill a {
+      color: #034da2;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+    }
+    .breadcrumb-arrow {
+      margin: 0 7px;
+      color: #94a3b8;
+      font-size: 11px;
+    }
+
+    /* ---------------- CARDS ---------------- */
+    .cards-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .dash-card {
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+      border-top: 3.5px solid #d49b17;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+      color: #ffffff;
+    }
+
+    .card-profile { background: linear-gradient(180deg, #0352b2 0%, #00377e 100%); }
+    .card-placement { background: linear-gradient(180deg, #18864d 0%, #11683a 100%); }
+    .card-scholarship { background: linear-gradient(180deg, #de6e0e 0%, #ab4e02 100%); }
+    .card-account { background: linear-gradient(180deg, #d32029 0%, #9f121a 100%); }
+
+    .dash-card-body {
+      padding: 14px 16px 12px 16px;
+      position: relative;
+      z-index: 2;
+    }
+    .dash-card-title {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      margin: 0;
+    }
+
+    .card-watermark {
+      position: absolute;
+      right: 14px;
+      top: 6px;
+      opacity: 0.22;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .dash-card-footer {
+      background-color: rgba(0, 0, 0, 0.22);
+      padding: 7px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      cursor: pointer;
+      user-select: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* ---------------- MAIN CONTAINER ---------------- */
+    .main-section-card {
+      background: #ffffff;
+      border-radius: 10px;
+      border: 1px solid #d8e0ea;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      overflow: hidden;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .main-banner-header {
+      background: #004595;
+      color: #ffffff;
+      padding: 13px 12px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+    }
+    .main-banner-title {
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      margin: 0;
+    }
+
+    .main-card-content {
+      padding: 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .sub-panel {
+      background: #ffffff;
+      border: 1px solid #dce2ea;
+      border-radius: 7px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .sub-panel-head {
+      background: #f7f8fa;
+      border-bottom: 1px solid #dce2ea;
+      padding: 9px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sub-panel-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1e293b;
+      margin: 0;
+    }
+
+    .student-profile-body {
+      padding: 14px 12px 16px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .avatar-question-box {
+      width: 50px;
+      height: 50px;
+      border: 1.5px solid #d1d5db;
+      background: #ffffff;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+    }
+    .avatar-q-mark {
+      background: #2563eb;
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 800;
+      width: 22px;
+      height: 22px;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .student-info-list {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      font-size: 12px;
+      color: #1e293b;
+      padding-left: 2px;
+    }
+
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+      word-break: break-word;
+    }
+    .info-label {
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .apply-section-body {
+      padding: 16px 14px;
+      text-align: center;
+      position: relative;
+      z-index: 10;
+    }
+
+    .btn-apply-outpass {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #0d6efd;
+      color: #ffffff !important;
+      border: 1px solid #0d6efd;
+      border-radius: 5px;
+      padding: 10px 28px;
+      font-size: 14px;
+      font-weight: 600;
+      min-height: 44px;
+      min-width: 150px;
+      cursor: pointer !important;
+      touch-action: manipulation;
+      user-select: none;
+      box-shadow: 0 2px 4px rgba(13, 110, 253, 0.35);
+    }
+
+    /* ---------------- TABLE FORMATTING ---------------- */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 10px;
+    }
+
+    .history-grid-table {
+      width: 100%;
+      min-width: 500px;
+      border-collapse: collapse;
+      font-size: 11px;
+      border: 1px solid #dce2ea;
+    }
+
+    .history-grid-table th {
+      background: #003682;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 8px 6px;
+      border: 1px solid #ffffff;
+      text-align: left;
+      line-height: 1.3;
+    }
+
+    .history-grid-table td {
+      border: 1px solid #dee2e6;
+      padding: 7px 6px;
+      font-size: 11px;
+      color: #1e293b;
+      vertical-align: middle;
+      background: #ffffff;
+      line-height: 1.35;
+    }
+
+    .history-grid-table tr:nth-child(even) td { background: #fbfbfb; }
+
+    .td-approved-text {
+      color: #1e293b !important;
+      font-weight: 600 !important;
+      white-space: normal;
+    }
+
+    .td-return-text {
+      color: #1e293b !important;
+      font-weight: 400;
+      cursor: pointer;
+    }
+
+    /* Footer */
+    .gniot-footer {
+      background: #004595;
+      color: #f7c331;
+      padding: 14px 10px;
+      text-align: center;
+      font-size: 10.5px;
+      line-height: 1.5;
+      border-top: 1px solid #003777;
+      position: relative;
+      z-index: 10;
+    }
+    .footer-highlight { color: #ffffff; font-weight: 600; }
+    .footer-link { color: #f7c331; text-decoration: underline; }
+
+    /* ---------------- VIEW 2: 100% SCREENSHOT VIEW ---------------- */
+    #mobileAppView {
+      background-color: #f0f3f8;
+      min-height: 100vh;
+      display: none;
+      position: relative;
+      padding-bottom: 78px;
+    }
+
+    .rec-top-header {
+      background-color: #0b2553;
+      color: #ffffff;
+      padding: 10px 14px 13px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 2px solid #eab308;
+    }
+
+    .rec-header-left {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .rec-menu-box {
+      width: 38px;
+      height: 38px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 9px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4.5px;
+      cursor: pointer;
+    }
+
+    .rec-menu-box span {
+      display: block;
+      width: 17px;
+      height: 2px;
+      background-color: #ffffff;
+      border-radius: 2px;
+    }
+
+    .rec-user-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .rec-user-name {
+      font-size: 14.5px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      color: #ffffff;
+      text-transform: uppercase;
+      line-height: 1.15;
+    }
+
+    .rec-user-id {
+      font-size: 11.5px;
+      color: #eab308;
+      font-weight: 700;
+      margin-top: 1px;
+    }
+
+    .rec-header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .rec-bell-box {
+      width: 38px;
+      height: 38px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .rec-bell-dot {
+      position: absolute;
+      top: 5px;
+      right: 6px;
+      width: 7px;
+      height: 7px;
+      background-color: #ef4444;
+      border: 1.5px solid #0b2553;
+      border-radius: 50%;
+    }
+
+    .rec-avatar-ss {
+      width: 38px;
+      height: 38px;
+      background-color: #eab308;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 13.5px;
+      color: #000000;
+      cursor: pointer;
+      user-select: none;
+    }
+    .rec-avatar-ss:active {
+      transform: scale(0.95);
+    }
+
+    .rec-breadcrumb-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 12px 14px 4px 14px;
+    }
+
+    .rec-pill-dash {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      background-color: #18335f;
+      color: #cbd5e1;
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 11.5px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .rec-pill-arrow {
+      color: #94a3b8;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .rec-pill-outpass {
+      background-color: #172d54;
+      border: 1.5px solid #ca8a04;
+      color: #eab308;
+      border-radius: 20px;
+      padding: 5px 16px;
+      font-size: 11.5px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .rec-main-pad {
+      max-width: 440px;
+      margin: 0 auto;
+      padding: 10px 14px;
+    }
+
+    .rec-profile-card {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+      margin-bottom: 14px;
+      border: 1px solid #f1f5f9;
+    }
+
+    .rec-profile-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background-color: #e0e7f7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 800;
+      color: #0b439c;
+      flex-shrink: 0;
+    }
+
+    .rec-profile-text h2 {
+      font-size: 16.5px;
+      font-weight: 800;
+      color: #0c2b5f;
+      letter-spacing: -0.2px;
+      margin-bottom: 3px;
+    }
+
+    .rec-profile-text p {
+      font-size: 13px;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .rec-not-available-card {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 38px 20px 34px 20px;
+      text-align: center;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+      border: 1px solid #f1f5f9;
+      margin-bottom: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .rec-not-avail-symbol {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      border: 4px solid #e05d5d;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin-bottom: 18px;
+    }
+    .rec-not-avail-symbol::after {
+      content: '';
+      position: absolute;
+      width: 48px;
+      height: 4px;
+      background-color: #e05d5d;
+      transform: rotate(-45deg);
+    }
+
+    .rec-card-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #0b3d87;
+      margin-bottom: 6px;
+      letter-spacing: -0.2px;
+    }
+
+    .rec-card-sub {
+      font-size: 13px;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .rec-history-wrap {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+      border: 1px solid #f1f5f9;
+    }
+
+    .rec-history-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+      padding: 4px 4px 8px 4px;
+    }
+
+    .rec-history-icon {
+      width: 36px;
+      height: 36px;
+      background-color: #fef3c7;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #d97706;
+    }
+
+    .rec-history-icon svg {
+      width: 18px;
+      height: 18px;
+      stroke: #d97706;
+    }
+
+    .rec-history-head h3 {
+      font-size: 17px;
+      font-weight: 800;
+      color: #0b3d87;
+    }
+
+    .rec-cards-stream {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .rec-item-card {
+      background: #f4f7fc;
+      border-radius: 14px;
+      padding: 14px 15px;
+      border: 1px solid #e9edf5;
+    }
+
+    .rec-item-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .rec-item-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background-color: #0b439c;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .rec-item-title {
+      font-size: 14.5px;
+      font-weight: 800;
+      color: #0f3575;
+    }
+
+    .rec-item-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 12px;
+      font-size: 12.5px;
+    }
+
+    .rec-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #64748b;
+    }
+
+    .rec-row-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+    }
+
+    .rec-row-label svg {
+      width: 14px;
+      height: 14px;
+      stroke: #f59e0b;
+      stroke-width: 2.2;
+      fill: none;
+    }
+
+    .rec-row-val {
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: -0.1px;
+    }
+
+    /* Normal black font for Approved Date (No Green Highlight) */
+    .rec-val-approved {
+      color: #0f172a !important;
+      font-weight: 700 !important;
+    }
+
+    /* Normal black font for Return Date when Not Returned */
+    .rec-val-not-returned {
+      color: #1e293b !important;
+      font-weight: 400 !important;
+    }
+
+    .rec-val-green {
+      color: #16a34a !important;
+    }
+
+    .rec-pills-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .rec-pill-warden {
+      background-color: #f0fdf4;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+      padding: 6px 4px;
+      border-radius: 8px;
+    }
+
+    .rec-pill-return {
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+      padding: 6px 4px;
+      border-radius: 8px;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+    }
+
+    .rec-pill-return.not-returned {
+      background-color: #fef2f2;
+      color: #dc2626;
+      border: 1px solid #fecaca;
+    }
+
+    .rec-pill-return.returned {
+      background-color: #f0fdf4;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+    }
+
+    .rec-bottom-tabs {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-around;
+      padding: 9px 0 11px 0;
+      z-index: 100;
+    }
+
+    .rec-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: #64748b;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .rec-tab.active {
+      color: #0b439c;
+      font-weight: 700;
+    }
+    .rec-tab svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* ---------------- MODAL FORM ---------------- */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      z-index: 999999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+    }
+    .modal-backdrop.is-open { display: flex !important; }
+
+    .modal-box {
+      background: #ffffff;
+      width: 100%;
+      max-width: 440px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header-bar {
+      background: #004595;
+      color: #ffffff;
+      padding: 11px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-close-icon {
+      background: transparent;
+      border: none;
+      color: #ffffff;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .modal-form-content {
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 12.5px;
+    }
+
+    .form-group-label {
+      display: block;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 4px;
+      font-size: 12px;
+    }
+
+    .form-control {
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 5px;
+      padding: 8px 10px;
+      font-size: 14px;
+      color: #1e293b;
+      outline: none;
+    }
+
+    .grid-two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .modal-footer-bar {
+      border-top: 1px solid #e2e8f0;
+      padding: 10px 14px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      background: #f8fafc;
+    }
+
+    .btn-cancel {
+      background: #e2e8f0;
+      color: #334155;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-submit-pass {
+      background: #004595;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* Toast */
+    .toast-box {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #111827;
+      color: #ffffff;
+      padding: 9px 18px;
+      border-radius: 25px;
+      font-size: 12.5px;
+      font-weight: 600;
+      z-index: 1000000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    }
+    .toast-box.show { opacity: 1; }
+  </style>
+</head>
+
+<body>
+
+  <!-- VIEW 1: ORIGINAL ERP PORTAL -->
+  <div id="originalPortalView">
+    <header class="gniot-header">
+      <div style="display: flex; align-items: center;">
+        <div class="brand-logo-badge" onclick="handleSecretLogout()" title="GNIOT Portal">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#002c6b">
+            <path d="M12 3L1 9L12 15L21 10.09V17H23V9M5 13.18V17.18L12 21L19 17.18V13.18L12 17L5 13.18Z"/>
+          </svg>
+          <span class="brand-logo-text">GNIOT</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button type="button" class="nav-toggle-btn" onclick="showNotification('Main Menu opened')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- LOGIN -->
+    <main id="loginView">
+      <div class="login-card">
+        <div class="login-card-header">
+          <h2>Hostel OutPass Login</h2>
+          <p>Please enter your student details to proceed</p>
+        </div>
+        <form id="studentLoginForm" onsubmit="handleLoginSubmit(event)" class="login-card-body">
+          <div>
+            <label class="form-group-label" for="loginStudentId">Student ID</label>
+            <input type="text" id="loginStudentId" class="form-control" required placeholder="e.g. Student Id">
+          </div>
+          <div>
+            <label class="form-group-label" for="loginStudentName">Full Name</label>
+            <input type="text" id="loginStudentName" class="form-control" required placeholder="e.g. Student Name">
+          </div>
+          <div>
+            <label class="form-group-label" for="loginMobile">Mobile Number</label>
+            <input type="tel" id="loginMobile" class="form-control" required placeholder="e.g. Phone Number">
+          </div>
+          <button type="submit" class="btn-login-submit">Login &amp; Enter Portal</button>
+        </form>
+      </div>
+    </main>
+
+    <!-- DASHBOARD -->
+    <main id="portalDashboard" class="portal-container" style="display: none;">
+      <!-- Hidden switch to Screen Recording View -->
+      <div class="breadcrumb-pill">
+        <a href="javascript:void(0)" onclick="openRecordingView()" title="Open App View">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#034da2" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+          <span style="text-decoration: underline;">Dashboard</span>
+        </a>
+        <span class="breadcrumb-arrow">›</span>
+        <span>My Dashboard</span>
+      </div>
+
+      <!-- 4 Cards -->
+      <section class="cards-stack">
+        <div class="dash-card card-profile">
+          <svg class="card-watermark" width="62" height="62" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <div class="dash-card-body">
+            <h2 class="dash-card-title">My Profile</h2>
+          </div>
+          <div class="dash-card-footer" onclick="showNotification('Opening Profile Details')">
+            <span>View Details</span>
+            <span>➜</span>
+          </div>
+        </div>
+
+        <div class="dash-card card-placement">
+          <svg class="card-watermark" width="62" height="62" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <div class="dash-card-body">
+            <h2 class="dash-card-title">Placement Notice</h2>
+          </div>
+          <div class="dash-card-footer" onclick="showNotification('Opening Placement Notices')">
+            <span>View Details</span>
+            <span>➜</span>
+          </div>
+        </div>
+
+        <div class="dash-card card-scholarship">
+          <svg class="card-watermark" width="62" height="62" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+            <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+          </svg>
+          <div class="dash-card-body">
+            <h2 class="dash-card-title">Scholarship</h2>
+          </div>
+          <div class="dash-card-footer" onclick="showNotification('Opening Scholarship Info')">
+            <span>View Details</span>
+            <span>➜</span>
+          </div>
+        </div>
+
+        <div class="dash-card card-account">
+          <div class="card-watermark" style="font-size: 58px; font-weight: 900; line-height: 1; top: 0; right: 12px; opacity: 0.22;">Rs</div>
+          <div class="dash-card-body">
+            <h2 class="dash-card-title">Account</h2>
+          </div>
+          <div class="dash-card-footer" onclick="showNotification('Opening Account Details')">
+            <span>View Details</span>
+            <span>➜</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Main Portal Container -->
+      <section class="main-section-card">
+        <div class="main-banner-header">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+            <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+          </svg>
+          <h1 class="main-banner-title">Student Hostel OutPass</h1>
+        </div>
+
+        <div class="main-card-content">
+          <!-- Profile -->
+          <div class="sub-panel">
+            <div class="sub-panel-head">
+              <h3 class="sub-panel-title">Student Profile</h3>
+            </div>
+            <div class="student-profile-body">
+              <div class="avatar-question-box">
+                <div class="avatar-q-mark">?</div>
+              </div>
+              <div class="student-info-list">
+                <div class="info-row">
+                  <span class="info-label">Student ID:</span> <span id="displayStudentId">--</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Name:</span> <span id="displayName">--</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Class:</span> <span>Computer Science-AI-ML - 1st Year</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Mobile:</span> <span id="displayMobile">--</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Email:</span> <span id="displayEmail">--</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Apply Button -->
+          <div class="sub-panel">
+            <div class="sub-panel-head">
+              <h3 class="sub-panel-title">Hostel OutPass</h3>
+            </div>
+            <div class="apply-section-body">
+              <button type="button" class="btn-apply-outpass" onclick="openApplyModal()">Apply OutPass</button>
+            </div>
+          </div>
+
+          <!-- History Table -->
+          <div class="sub-panel">
+            <div class="sub-panel-head">
+              <h3 class="sub-panel-title">OutPass History</h3>
+            </div>
+            <div class="table-container">
+              <table class="history-grid-table">
+                <thead>
+                  <tr>
+                    <th style="width: 17%;">Apply Date</th>
+                    <th style="width: 20%;">Reason</th>
+                    <th style="width: 17%;">Expected<br>Return<br>Date</th>
+                    <th style="width: 15%;">Expected<br>Return<br>Time</th>
+                    <th style="width: 18%;">Approved<br>Date</th>
+                    <th style="width: 13%;">Return<br>Date</th>
+                  </tr>
+                </thead>
+                <tbody id="outpassTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="gniot-footer">
+      <div style="max-width: 580px; margin: 0 auto;">
+        <p style="margin-bottom: 2px;">
+          Copyright © 2026 GNIOT Group of Institutions &nbsp;|&nbsp; Designed &amp; Developed by:
+          <span class="footer-highlight">Er. Ramesh Bhardwaj</span>
+          <span>(Group Head – ERP | Sr. Engineer | Full-Stack Developer)</span>
+        </p>
+        <p>
+          <a href="tel:8860606695" class="footer-link">8860606695</a>
+          &nbsp;|&nbsp;
+          <a href="mailto:erphead@gniot.net.in" class="footer-link">erphead@gniot.net.in</a>
+        </p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- VIEW 2: 100% IDENTICAL SCREENSHOT VIEW -->
+  <div id="mobileAppView">
+    <!-- Top Navy Header with Gold Stripe -->
+    <header class="rec-top-header">
+      <div class="rec-header-left">
+        <div class="rec-menu-box" onclick="showNotification('Menu Opened')">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="rec-user-info">
+          <span class="rec-user-name" id="recHeaderName">SHIVAM SHIVRAJ</span>
+          <span class="rec-user-id" id="recHeaderId">2600202</span>
+        </div>
+      </div>
+
+      <div class="rec-header-right">
+        <div class="rec-bell-box" onclick="showNotification('Notifications')">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <span class="rec-bell-dot"></span>
+        </div>
+        <div class="rec-avatar-ss" onclick="handleSecretLogout()">SS</div>
+      </div>
+    </header>
+
+    <!-- Exact Breadcrumb Bar -->
+    <div class="rec-breadcrumb-bar">
+      <div class="rec-pill-dash">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+        </svg>
+        <span>Dashboard</span>
+      </div>
+      <span class="rec-pill-arrow">›</span>
+      <div class="rec-pill-outpass">Hostel OutPass</div>
+    </div>
+
+    <div class="rec-main-pad">
+      <!-- Card 1: Student Profile -->
+      <section class="rec-profile-card">
+        <div class="rec-profile-avatar" id="recAvatarLetter">S</div>
+        <div class="rec-profile-text">
+          <h2 id="recProfileName">SHIVAM SHIVRAJ</h2>
+          <p id="recProfileId">ID: 105001</p>
+        </div>
+      </section>
+
+      <!-- Card 2: 🚫 OutPass Not Available -->
+      <section class="rec-not-available-card">
+        <div class="rec-not-avail-symbol"></div>
+        <h3 class="rec-card-title">OutPass Not Available</h3>
+        <p class="rec-card-sub">Only hostel residents can apply for outpass.</p>
+      </section>
+
+      <!-- Card 3: OutPass History Stream -->
+      <section class="rec-history-wrap">
+        <div class="rec-history-head">
+          <div class="rec-history-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <h3>OutPass History</h3>
+        </div>
+
+        <div class="rec-cards-stream" id="recCardsContainer">
+          <!-- Populated dynamically -->
+        </div>
+      </section>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="rec-bottom-tabs">
+      <div class="rec-tab" onclick="closeRecordingView()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+          <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+          <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+          <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+        </svg>
+        <span>Dashboard</span>
+      </div>
+
+      <div class="rec-tab active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+        <span>Profile</span>
+      </div>
+
+      <div class="rec-tab" onclick="closeRecordingView()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+        <span>Back</span>
+      </div>
+    </nav>
+  </div>
+
+  <!-- MODAL: Apply Hostel OutPass Form -->
+  <div id="applyModal" class="modal-backdrop" onclick="handleBackdropClick(event)">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div class="modal-header-bar">
+        <span style="font-size: 14px; font-weight: 700;">Apply Hostel OutPass</span>
+        <button type="button" class="modal-close-icon" onclick="closeApplyModal()">&times;</button>
+      </div>
+
+      <form id="outpassForm" onsubmit="submitNewOutPass(event)">
+        <div class="modal-form-content">
+          <div>
+            <label class="form-group-label" for="outpassType">OutPass Type</label>
+            <select id="outpassType" class="form-control" onchange="updateReasonSuggestions(this.value)">
+              <option value="Local Outing">Local Outing (Normal)</option>
+              <option value="Home Visit">Home Visit (Leave)</option>
+              <option value="Medical / Hospital">Medical Emergency / Hospital</option>
+              <option value="Market / Personal">Market / Shopping</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="form-group-label" for="outpassReason">Reason</label>
+            <input type="text" id="outpassReason" required class="form-control" value="Grocery Shopping">
+          </div>
+
+          <!-- Customizable Apply & Approved Time -->
+          <div class="grid-two-col">
+            <div>
+              <label class="form-group-label" for="applyDateTime">Pass Applied Time</label>
+              <input type="datetime-local" step="1" id="applyDateTime" class="form-control">
+            </div>
+            <div>
+              <label class="form-group-label" for="approvedDateTime">Pass Approved Time</label>
+              <input type="datetime-local" step="1" id="approvedDateTime" class="form-control">
+            </div>
+          </div>
+
+          <div class="grid-two-col">
+            <div>
+              <label class="form-group-label" for="returnDate">Expected Return Date</label>
+              <input type="date" id="returnDate" required class="form-control">
+            </div>
+            <div>
+              <label class="form-group-label" for="returnTime">Expected Return Time</label>
+              <input type="text" id="returnTime" required value="21:00:00" class="form-control" placeholder="21:00:00">
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer-bar">
+          <button type="button" class="btn-cancel" onclick="closeApplyModal()">Cancel</button>
+          <button type="submit" class="btn-submit-pass">Submit &amp; Apply</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Box -->
+  <div id="toastBox" class="toast-box">
+    <span id="toastMessage">Done</span>
+  </div>
+
+  <script>
+    const STORAGE_KEY_USER = 'gniot_erp_user';
+
+    function pad2(n) { return String(n).padStart(2, '0'); }
+
+    function formatDateYMD(d) {
+      return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+    }
+
+    function formatDateDMY(d) {
+      return `${pad2(d.getDate())}-${pad2(d.getMonth() + 1)}-${d.getFullYear()}`;
+    }
+
+    function formatTimeHM(d) {
+      return `${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+    }
+
+    function formatTimestampDash(d) {
+      return `${formatDateDMY(d)}  ${formatTimeHM(d)}`;
+    }
+
+    function formatForDatetimeLocal(d) {
+      return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}T${pad2(d.getHours())}:${pad2(d.getMinutes())}:${pad2(d.getSeconds())}`;
+    }
+
+    function showNotification(msg) {
+      const toast = document.getElementById('toastBox');
+      const text = document.getElementById('toastMessage');
+      if (!toast || !text) return;
+      text.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2600);
+    }
+
+    function getStorageKey(studentId) {
+      return 'gniot_erp_history_v7_' + String(studentId).trim();
+    }
+
+    function getLoggedUser() {
+      const stored = localStorage.getItem(STORAGE_KEY_USER);
+      if (stored) {
+        try { return JSON.parse(stored); } catch (e) { console.error(e); }
+      }
+      return null;
+    }
+
+    function setLoggedUser(user) {
+      localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(user));
+    }
+
+    function getUserOutpasses(studentId) {
+      if (!studentId) return [];
+      const key = getStorageKey(studentId);
+      const stored = localStorage.getItem(key);
+      if (stored) {
+        try { return JSON.parse(stored); } catch(e) { console.error(e); }
+      }
+
+      const defaultExactScreenshotData = [
+        {
+          applyDate: '11-10-2026  18:00',
+          reason: 'Grocery Shopping',
+          returnDate: '11-10-2026',
+          returnTime: '21:00:00',
+          approvedDate: '11-10-2026  18:04',
+          returnDateActual: '11-10-2026  20:28',
+          isReturned: true
+        },
+        {
+          applyDate: '10-10-2026  13:12',
+          reason: 'Visiting Family',
+          returnDate: '10-10-2026',
+          returnTime: '21:00:00',
+          approvedDate: '10-10-2026  13:24',
+          returnDateActual: '11-10-2026  20:28',
+          isReturned: true
+        },
+        {
+          applyDate: '03-10-2026  13:09',
+          reason: 'Hospital Visit or Treatment',
+          returnDate: '09-10-2026',
+          returnTime: '21:00:00',
+          approvedDate: '03-10-2026  13:11',
+          returnDateActual: '06-10-2026  19:46',
+          isReturned: true
+        },
+        {
+          applyDate: '02-10-2026  13:24',
+          reason: 'Weekend Outing',
+          returnDate: '02-10-2026',
+          returnTime: '21:00:00',
+          approvedDate: '02-10-2026  13:28',
+          returnDateActual: '02-10-2026  17:33',
+          isReturned: true
+        },
+        {
+          applyDate: '25-09-2026  14:15',
+          reason: 'Grocery Shopping',
+          returnDate: '25-09-2026',
+          returnTime: '21:00:00',
+          approvedDate: '25-09-2026  14:26',
+          returnDateActual: '25-09-2026  20:07',
+          isReturned: true
+        }
+      ];
+      saveUserOutpasses(studentId, defaultExactScreenshotData);
+      return defaultExactScreenshotData;
+    }
+
+    function saveUserOutpasses(studentId, list) {
+      if (!studentId) return;
+      localStorage.setItem(getStorageKey(studentId), JSON.stringify(list));
+    }
+
+    function applyUserToUI(user) {
+      const uName = user.name.toUpperCase();
+      const initials = user.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() || 'SS';
+
+      // Original ERP View
+      document.getElementById('displayStudentId').textContent = user.studentId;
+      document.getElementById('displayName').textContent = uName;
+      document.getElementById('displayMobile').textContent = user.mobile;
+      document.getElementById('displayEmail').textContent = `${user.name.replace(/[^a-zA-Z0-9]/g, '').toUpperCase()}@GMAIL.COM`;
+
+      // Screen Recording View
+      document.getElementById('recHeaderName').textContent = uName;
+      document.getElementById('recHeaderId').textContent = user.studentId;
+      document.getElementById('recProfileName').textContent = uName;
+      document.getElementById('recProfileId').textContent = 'ID: ' + user.studentId;
+      document.getElementById('recAvatarLetter').textContent = initials.charAt(0);
+    }
+
+    function switchToPortal(user) {
+      applyUserToUI(user);
+      document.getElementById('loginView').style.display = 'none';
+      document.getElementById('portalDashboard').style.display = 'block';
+      renderOriginalTable();
+      renderRecordingCards();
+    }
+
+    function switchToLogin() {
+      document.getElementById('loginView').style.display = 'block';
+      document.getElementById('portalDashboard').style.display = 'none';
+      document.getElementById('mobileAppView').style.display = 'none';
+      document.getElementById('originalPortalView').style.display = 'block';
+      document.getElementById('studentLoginForm').reset();
+    }
+
+    function handleLoginSubmit(e) {
+      if (e) e.preventDefault();
+      const studentId = document.getElementById('loginStudentId').value.trim();
+      const name = document.getElementById('loginStudentName').value.trim();
+      const mobile = document.getElementById('loginMobile').value.trim();
+
+      if (!studentId || !name) return alert('Enter student details');
+
+      const user = { studentId, name, mobile };
+      setLoggedUser(user);
+      switchToPortal(user);
+      showNotification('Welcome ' + name);
+    }
+
+    function handleSecretLogout() {
+      if (confirm('Do you want to log out of the OutPass Portal?')) {
+        localStorage.removeItem(STORAGE_KEY_USER);
+        switchToLogin();
+        showNotification('Logged out successfully');
+      }
+    }
+
+    function openRecordingView() {
+      document.getElementById('originalPortalView').style.display = 'none';
+      document.getElementById('mobileAppView').style.display = 'block';
+      window.scrollTo(0, 0);
+      renderRecordingCards();
+    }
+
+    function closeRecordingView() {
+      document.getElementById('mobileAppView').style.display = 'none';
+      document.getElementById('originalPortalView').style.display = 'block';
+      window.scrollTo(0, 0);
+      renderOriginalTable();
+    }
+
+    function togglePassReturn(index) {
+      const user = getLoggedUser();
+      if (!user) return;
+
+      const list = getUserOutpasses(user.studentId);
+      if (!list[index]) return;
+
+      if (!list[index].isReturned) {
+        list[index].isReturned = true;
+        list[index].returnDateActual = formatTimestampDash(new Date());
+        showNotification('Pass returned: ' + list[index].returnDateActual);
+      } else {
+        list[index].isReturned = false;
+        list[index].returnDateActual = 'Not Returned';
+        showNotification('Status set to: Not Returned');
+      }
+
+      saveUserOutpasses(user.studentId, list);
+      renderRecordingCards();
+      renderOriginalTable();
+    }
+
+    /* RENDER ORIGINAL TABLE: Return Date in normal black font */
+    function renderOriginalTable() {
+      const tbody = document.getElementById('outpassTableBody');
+      const user = getLoggedUser();
+      if (!tbody || !user) return;
+
+      const list = getUserOutpasses(user.studentId);
+      tbody.innerHTML = '';
+
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:14px; color:#1e293b;">No outpass records found.</td></tr>`;
+        return;
+      }
+
+      list.forEach((item, index) => {
+        const tr = document.createElement('tr');
+        const returnText = item.isReturned ? item.returnDateActual : 'Not Returned';
+
+        tr.innerHTML = `
+          <td>${item.applyDate}</td>
+          <td>${item.reason}</td>
+          <td>${item.returnDate}</td>
+          <td>${item.returnTime}</td>
+          <td class="td-approved-text">${item.approvedDate}</td>
+          <td class="td-return-text" onclick="togglePassReturn(${index})">${returnText}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    /* RENDER SCREENSHOT CARDS: Approved Date and Not Returned in standard black font */
+    function renderRecordingCards() {
+      const container = document.getElementById('recCardsContainer');
+      const user = getLoggedUser();
+      if (!container || !user) return;
+
+      const list = getUserOutpasses(user.studentId);
+      container.innerHTML = '';
+
+      list.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'rec-item-card';
+
+        const returnBadgeHtml = item.isReturned
+          ? `<div class="rec-pill-return returned" onclick="togglePassReturn(${index})">Status: Returned</div>`
+          : `<div class="rec-pill-return not-returned" onclick="togglePassReturn(${index})">Status: Not Returned</div>`;
+
+        // Returned date in green; Not Returned in standard black font
+        const returnDateValHtml = item.isReturned 
+          ? `<span class="rec-row-val rec-val-green">${item.returnDateActual}</span>`
+          : `<span class="rec-row-val rec-val-not-returned">Not Returned</span>`;
+
+        card.innerHTML = `
+          <div class="rec-item-top">
+            <span class="rec-item-num">${index + 1}</span>
+            <span class="rec-item-title">${item.reason}</span>
+          </div>
+
+          <div class="rec-item-grid">
+            <div class="rec-row">
+              <span class="rec-row-label">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                Apply Date
+              </span>
+              <span class="rec-row-val">${item.applyDate}</span>
+            </div>
+
+            <div class="rec-row">
+              <span class="rec-row-label">
+                <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                Expected Return Date
+              </span>
+              <span class="rec-row-val">${item.returnDate}</span>
+            </div>
+
+            <div class="rec-row">
+              <span class="rec-row-label">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                Expected Return Time
+              </span>
+              <span class="rec-row-val">${item.returnTime}</span>
+            </div>
+
+            <div class="rec-row">
+              <span class="rec-row-label">
+                <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                Approved Date
+              </span>
+              <span class="rec-row-val rec-val-approved">${item.approvedDate}</span>
+            </div>
+
+            <div class="rec-row">
+              <span class="rec-row-label">
+                <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"></path></svg>
+                Return Date
+              </span>
+              ${returnDateValHtml}
+            </div>
+          </div>
+
+          <div class="rec-pills-row">
+            <div class="rec-pill-warden">Warden: Approved</div>
+            ${returnBadgeHtml}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function openApplyModal() {
+      const modal = document.getElementById('applyModal');
+      const dateField = document.getElementById('returnDate');
+      const timeField = document.getElementById('returnTime');
+      const applyField = document.getElementById('applyDateTime');
+      const approvedField = document.getElementById('approvedDateTime');
+      
+      const now = new Date();
+      if (dateField && !dateField.value) dateField.value = formatDateYMD(now);
+      if (timeField && !timeField.value) timeField.value = "21:00:00";
+      if (applyField && !applyField.value) applyField.value = formatForDatetimeLocal(now);
+      if (approvedField && !approvedField.value) approvedField.value = formatForDatetimeLocal(new Date(now.getTime() + 60000));
+
+      if (modal) {
+        modal.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeApplyModal() {
+      const modal = document.getElementById('applyModal');
+      if (modal) {
+        modal.classList.remove('is-open');
+        document.body.style.overflow = '';
+      }
+    }
+
+    function handleBackdropClick(e) {
+      if (e.target && e.target.id === 'applyModal') closeApplyModal();
+    }
+
+    function updateReasonSuggestions(type) {
+      const reasonInput = document.getElementById('outpassReason');
+      if (!reasonInput) return;
+      if (type === 'Local Outing') reasonInput.value = 'Grocery Shopping';
+      else if (type === 'Home Visit') reasonInput.value = 'Visiting Family';
+      else if (type === 'Medical / Hospital') reasonInput.value = 'Hospital Visit or Treatment';
+      else if (type === 'Market / Personal') reasonInput.value = 'Weekend Outing';
+    }
+
+    function submitNewOutPass(e) {
+      if (e) e.preventDefault();
+      const user = getLoggedUser();
+      if (!user) return switchToLogin();
+
+      const reason = document.getElementById('outpassReason').value.trim() || 'Grocery Shopping';
+      const returnDateField = document.getElementById('returnDate');
+      const returnTimeField = document.getElementById('returnTime');
+      const applyDateTimeField = document.getElementById('applyDateTime');
+      const approvedDateTimeField = document.getElementById('approvedDateTime');
+
+      let returnDateFormatted = formatDateDMY(new Date());
+      if (returnDateField && returnDateField.value) {
+        const parts = returnDateField.value.split('-');
+        returnDateFormatted = `${parts[2]}-${parts[1]}-${parts[0]}`;
+      }
+
+      let returnTime = (returnTimeField && returnTimeField.value.trim()) ? returnTimeField.value.trim() : '21:00:00';
+      if (returnTime.length === 5) {
+        returnTime += ':00';
+      }
+
+      let applyTimestamp = '';
+      if (applyDateTimeField && applyDateTimeField.value) {
+        applyTimestamp = formatTimestampDash(new Date(applyDateTimeField.value));
+      } else {
+        applyTimestamp = formatTimestampDash(new Date());
+      }
+
+      let approvedTimestamp = '';
+      if (approvedDateTimeField && approvedDateTimeField.value) {
+        approvedTimestamp = formatTimestampDash(new Date(approvedDateTimeField.value));
+      } else {
+        approvedTimestamp = formatTimestampDash(new Date(Date.now() + 60000));
+      }
+
+      const newPass = {
+        applyDate: applyTimestamp,
+        reason: reason,
+        returnDate: returnDateFormatted,
+        returnTime: returnTime,
+        approvedDate: approvedTimestamp,
+        returnDateActual: '--',
+        isReturned: false
+      };
+
+      const list = getUserOutpasses(user.studentId);
+      list.unshift(newPass);
+      saveUserOutpasses(user.studentId, list);
+
+      renderOriginalTable();
+      renderRecordingCards();
+      closeApplyModal();
+      showNotification('OutPass Applied!');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      let existingUser = getLoggedUser();
+      if (!existingUser) {
+        existingUser = {
+          studentId: '2600202',
+          name: 'SHIVAM SHIVRAJ',
+          mobile: '9876543210'
+        };
+        setLoggedUser(existingUser);
+      }
+      switchToPortal(existingUser);
+    });
+  </script>
+</body>
+</html>
