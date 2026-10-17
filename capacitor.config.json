@@ -1,0 +1,6 @@
+{
+  "appId": "com.custom.app",
+  "appName": "GNIOT ERP",
+  "webDir": "www",
+  "bundledWebRuntime": false
+}
