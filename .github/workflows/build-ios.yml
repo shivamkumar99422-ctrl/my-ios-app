@@ -25,7 +25,7 @@ jobs:
         run: npx cap add ios
 
       - name: Generate iOS app icon variants
-        run: npx @capacitor/assets generate --ios --iconSource assets/icon.png
+        run: npx @capacitor/assets generate --ios
 
       - name: Sync web assets to native iOS project
         run: npx cap sync ios
